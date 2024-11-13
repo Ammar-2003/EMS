@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django static and media folders
+staticfiles/
+media/
+
+# Django migrations
+**/migrations/
+
+# Ignore SQLite database file
+*.sqlite3
+
+# Environment variables file
+.env
+
+# macOS and Linux
+.DS_Store
+*.swp
+
+# Visual Studio Code
+.vscode/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Python-specific
+*.pyc
+*.pyo
+*.pyd
+.Python
+.python-version
+
+# Pipenv files
+Pipfile
+Pipfile.lock
+
+# pyenv
+.python-version
+
+# IDEs and editors
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore node_modules (in case you use JavaScript dependencies)
+node_modules/

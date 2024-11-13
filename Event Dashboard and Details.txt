@@ -1,0 +1,1 @@
+As traditional: the left side will be where we will have the dashboard below it we will have, Event Category, Create Category, Category List,  Events, Create Event, Event List, Add Event Member , Join Event List, Event Wish List, Add Event wish user, Complete Event list , Absence User, Complete User, Create User Mark, Complete User Mark

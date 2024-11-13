@@ -1,0 +1,25 @@
+<!-- create_category.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h1 class="display-6 mb-4 text-center">Create Category</h1>
+            
+            <div class="card shadow-sm p-4">
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+                    
+                    {{ form.as_p }}
+                    
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary w-100">Create Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
