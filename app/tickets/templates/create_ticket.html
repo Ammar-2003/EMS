@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="create-ticket">
+    <div class="container mt-5">
+        <h2>Create Ticket for Upcoming Event</h2>
+        
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="event">Event</label>
+                <select name="event" id="event" class="form-control">
+                    <option value="">Select an Event</option>
+                    {% for event in events %}
+                        <option value="{{ event.id }}">{{ event.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Ticket Price</label>
+                <input type="number" name="price" id="price" class="form-control" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tickets_available">Tickets Available</label>
+                <input type="number" name="tickets_available" id="tickets_available" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Ticket</button>
+        </form>
+    </div>
+    </div>
+    <style>
+.create-ticket {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 7%;
+    margin-bottom: 2%;
+}
+
+/* Adding margin between form elements */
+.create-ticket .form-group {
+    margin-bottom: 15px; /* Space between form fields */
+}
+
+/* Additional space around the submit button */
+.create-ticket .btn {
+    margin-top: 10px;
+}
+    </style>
+{% endblock %}

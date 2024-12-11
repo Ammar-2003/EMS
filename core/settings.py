@@ -45,9 +45,14 @@ PROJECT_APPS = [
     'app.home',
     'app.categories',
     'app.events',
-    'app.members',
+    'app.users',
     'app.wishes',
     'app.marks',
+    'app.tickets',
+    'app.search',
+    'debug_toolbar',
+    'app.contact',
+
 
 ]
 
@@ -57,6 +62,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -64,6 +70,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 
 TEMPLATES = [
     {
@@ -125,6 +136,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -135,3 +150,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Email Recieving Functionality
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ch.ammar.tech@gmail.com'  # Your email (this will be used to send the email)
+EMAIL_HOST_PASSWORD = 'toxic1234'            # Your email password
+EMAIL_RECEIVER = 'ch.ammar.tech@gmail.com'   # Your email (to receive the email)

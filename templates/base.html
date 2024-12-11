@@ -18,6 +18,7 @@
             position: fixed !important;
             width: 100%;
             top: 0;
+            height: 6%;
             z-index: 1000;
         }
         /* Navbar brand with icon */
@@ -35,23 +36,12 @@
             font-size: 1.1rem; /* Slightly reduced icon size */
         }
 
-        /* White separator */
-        .navbar-custom .navbar-brand .separator {
-            width: 0.05vw; /* Adjust the separator width */
-            height: 3.5vw; /* Reduced height */
-            background-color: #fff;
-            margin-left: 12.68vw; /* Reduced space using rem */
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%); /* Adjust to perfectly center it */
-        }
-
         /* Other navbar link styles */
         .navbar-custom .navbar-nav .nav-link {
             color: #f8f9fa;
             font-weight: 500;
-            font-size: 0.9rem; /* Reduced font size */
-            padding: 0.25rem 1rem; /* Reduced padding */
+            font-size: .9rem; /* Reduced font size */
+            padding: .25rem 1rem; /* Reduced padding */
         }
 
         .navbar-custom .navbar-nav .nav-link:hover,
@@ -84,7 +74,6 @@
             outline: none;
             box-shadow: 0 0 5px #ffc107;
         }
-        /* Dropdown toggle button */
 /* Dropdown menu styling */
 .navbar-custom .dropdown-menu {
     background-color: #343a40; /* Softer dark gray background */
@@ -138,17 +127,93 @@
     .navbar-brand i {
         margin-right: 0.5rem; /* Space between the icon and "Admin Panel" text */
     }
+/* Sidebar */
+    .sidebar {
+        margin-top: 2.2%;
+        background-color: #444;
+        color: #fff;
+        height: 100vh;
+        width: 13%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+}
+
+/* Sidebar heading */
+.sidebar-heading {
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: #212529;
+    border-bottom: 1px solid #495057;
+}
+
+/* Sidebar link styles */
+.sidebar-link {
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.sidebar-link i {
+    margin-right: 8px;
+}
+
+.sidebar-link:hover {
+    color: #fff;
+    background-color: #495057;
+    border-left: 4px solid #007bff;
+    text-decoration: none;
+}
+
+/* Sidebar toggle icon */
+.toggle-icon {
+    margin-left: auto;
+}
+
+/* Collapse styles */
+.collapse {
+    display: none;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+/* Content */
+.content {
+    margin-left: 220px;
+    padding: 20px;
+    min-height: 100vh; /* Ensure content takes at least the full height of the viewport */
+}
+
+/* Adjust for mobile screens */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .content {
+        margin-left: 0;
+    }
+}
+
+
 
 
     </style>
-</head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
-            <a class="navbar-brand me-auto" href="#">
+            <a class="navbar-brand me-auto" href="admin/">
                 <i class="fas fa-user-shield"></i> <!-- Admin Panel Icon -->
                 Admin Panel
-                <span class="separator"></span> <!-- White separator -->
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -159,7 +224,7 @@
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="contact/">Contact</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -174,7 +239,10 @@
                     </li>
                 </ul>
                 <!-- Search bar without button -->
-                <input class="form-control search-bar" type="search" placeholder="Search" aria-label="Search">
+                <form method="get" action="{% url 'global_search' %}">
+    <input class="form-control search-bar" type="search" name="q" placeholder="Search" aria-label="Search">
+</form>
+
                 <!-- Icons for notifications, messages, login/logout -->
                 <a href="#" class="icon-link" title="Notifications"><i class="fas fa-bell"></i></a>
                 <a href="#" class="icon-link" title="Messages"><i class="fas fa-envelope"></i></a>
@@ -182,9 +250,80 @@
             </div>
         </div>
     </nav>
+
+    <div class="sidebar">
+    <div class="sidebar-heading">Dashboard</div>
+    
+    <div class="sidebar-links">
+        <!-- Event Category Section -->
+        <a href="javascript:void(0);" class="sidebar-link" onclick="toggleSection('category-section')">
+            <i class="fas fa-folder-open"></i> Manage Categories 
+            <i class="fas fa-chevron-down toggle-icon"></i>
+        </a>
+        <div id="category-section" class="collapse">
+            <a href="{% url 'category_list' %}" class="sidebar-link sub-link"><i class="fas fa-pencil-alt"></i> Create Category</a>
+            <a href="{% url 'category_list' %}" class="sidebar-link sub-link"><i class="fas fa-list"></i> Category List</a>
+        </div>
+        
+        <!-- Events Section -->
+        <a href="javascript:void(0);" class="sidebar-link" onclick="toggleSection('events-section')">
+            <i class="fas fa-calendar-alt"></i> Manage Events 
+            <i class="fas fa-chevron-down toggle-icon"></i>
+        </a>
+        <div id="events-section" class="collapse">
+            <a href="{% url 'create_event' %}" class="sidebar-link sub-link"><i class="fas fa-pencil-alt"></i> Create Event</a>
+            <a href="{% url 'event_list' %}" class="sidebar-link sub-link"><i class="fas fa-list"></i> Event List</a>
+            <a href="#add-event-member" class="sidebar-link sub-link"><i class="fas fa-user-plus"></i> Add Member</a>
+            <a href="#join-event-list" class="sidebar-link sub-link"><i class="fas fa-users"></i> Join Event List</a>
+            <a href="#event-wish-list" class="sidebar-link sub-link"><i class="fas fa-heart"></i> Event Wish List</a>
+        </div>
+        
+        <!-- Manage Tickets Section -->
+<a href="javascript:void(0);" class="sidebar-link" onclick="toggleSection('tickets-section')">
+    <i class="fas fa-ticket-alt"></i> Manage Tickets 
+    <i class="fas fa-chevron-down toggle-icon"></i>
+</a>
+<div id="tickets-section" class="collapse">
+    <a href="{% url 'ticket' %}" class="sidebar-link sub-link"><i class="fas fa-shopping-cart"></i> Buy Ticket</a>
+    <a href="{% url 'create_ticket' %}" class="sidebar-link sub-link"><i class="fas fa-plus-circle"></i> Create Ticket</a>
+</div>
+        
+        <!-- User Status Section -->
+        <a href="javascript:void(0);" class="sidebar-link" onclick="toggleSection('user-status-section')">
+            <i class="fas fa-users"></i> User Status 
+            <i class="fas fa-chevron-down toggle-icon"></i>
+        </a>
+        <div id="user-status-section" class="collapse">
+            <a href="#absence-user" class="sidebar-link sub-link"><i class="fas fa-user-times"></i> Absence User</a>
+            <a href="#complete-user" class="sidebar-link sub-link"><i class="fas fa-user-check"></i> Complete User</a>
+        </div>
+
+        <!-- User Mark Section -->
+        <a href="javascript:void(0);" class="sidebar-link" onclick="toggleSection('user-mark-section')">
+            <i class="fas fa-marker"></i> User Mark 
+            <i class="fas fa-chevron-down toggle-icon"></i>
+        </a>
+        <div id="user-mark-section" class="collapse">
+            <a href="#create-user-mark" class="sidebar-link sub-link"><i class="fas fa-marker"></i> Create User Mark</a>
+            <a href="#complete-user-mark" class="sidebar-link sub-link"><i class="fas fa-check"></i> Complete User Mark</a>
+        </div>
+    </div>
+</div>
+
+
     <!-- Content that will be replaced in the child templates -->
-    {% block content %}{% endblock %}
+    {% block content %}
+    
+    {% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = (section.style.display === "block") ? "none" : "block";
+            const toggleIcon = section.previousElementSibling.querySelector('.toggle-icon');
+            toggleIcon.classList.toggle('rotate');
+        }
+    </script>
 </body>
 </html>

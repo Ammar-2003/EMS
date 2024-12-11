@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #black;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .search-form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-form input[type="text"] {
+            padding: 10px;
+            font-size: 1rem;
+            width: 70%;
+            max-width: 400px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-form button {
+            padding: 10px 15px;
+            font-size: 1rem;
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background-color: #375a9e;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f8f9fc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: black;
+        }
+
+        li p {
+            margin: 5px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-home a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #4e73df;
+            font-weight: bold;
+        }
+
+        .back-home a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Back to Home -->
+        <div class="back-home">
+            <a href="{% url 'home' %}">← Back to Home</a>
+        </div>
+
+        <h1>Search Results for "{{ query }}"</h1>
+
+        <!-- Search Form -->
+        <div class="search-form">
+            <form method="get" action="{% url 'global_search' %}">
+                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Events -->
+        <h2>Events</h2>
+        <ul>
+            {% for event in event_results %}
+                <li>
+                    <h3>{{ event.name }}</h3>
+                    <p>Location: {{ event.location }}</p>
+                    <p>Speaker: {{ event.speaker_name }}</p>
+                    <a href="{{ event.get_absolute_url }}">Click for Details</a>
+                </li>
+            {% empty %}
+                <li>No events found.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Event Members -->
+        <h2>Event Members</h2>
+        <ul>
+            {% for member in member_results %}
+                <li>
+                    <h3>{{ member.user.username }}</h3>
+                    <p>Role: {{ member.role }}</p>
+                    <p>Phone: {{ member.phone_number }}</p>
+                </li>
+            {% empty %}
+                <li>No members found.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Categories -->
+        <h2>Categories</h2>
+        <ul>
+            {% for category in category_results %}
+                <li>
+                    <h3>{{ category.name }}</h3>
+                </li>
+            {% empty %}
+                <li>No categories found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>

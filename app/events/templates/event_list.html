@@ -4,90 +4,525 @@
 <div class="container my-5">
     <h1 class="display-6 text-center">Events</h1>
 
-    <!-- Search Form for Event Name -->
-    <form method="get" class="row g-3 mb-4">
-        <div class="col-md-3">
-            <select name="status" class="form-select">
-                <option value="">All Status</option>
-                <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming</option>
-                <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
-                <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelled</option>
-            </select>
-        </div>
-        <!-- Event Name Search -->
-        <div class="col-md-6">
-            <input type="text" name="name" class="form-control" value="{{ name }}" placeholder="Search by Event Name">
-        </div>
-        
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Search</button>
-        </div>
-    </form>
-
+    <div class="search-form-container">
+        <!-- Search Form for Event Name -->
+        <form id="search-form" method="get" class="row g-3 mb-4 d-flex align-items-center search-form">
+            <!-- Status Filter -->
+            <div class="col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Status</option>
+                    <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
+                    <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+            </div>
+            <!-- Event Name Search -->
+            <div class="col-md-3">
+                <input type="text" name="name" class="form-control" value="{{ name }}" placeholder="Search by Event Name">
+            </div>
+            <!-- Date Filter -->
+            <div class="col-md-3">
+                <input 
+                    type="date" 
+                    name="date" 
+                    class="form-control" 
+                    value="{{ date|date:'Y-m-d' }}" 
+                    placeholder="Search by Date"
+                >
+            </div>
+            
+            <!-- Location Filter -->
+            <div class="col-md-3">
+                <input type="text" name="location" class="form-control" value="{{ location }}" placeholder="Search by Location">
+            </div>
+            <!-- Search Button -->
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </form>
+    </div>
+    
     <!-- Events Table -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Event Name</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Speaker</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for event in events %}
+    <div id="events-table-container" class="table-container">
+        <div class="table-responsive">
+            <table id="events-table" class="table table-bordered table-striped">
+                <thead class="table-dark">
                     <tr>
-                        <td>{{ event.name }}</td>
-                        <td>{{ event.description }}</td>
-                        <td>{{ event.date|date:"F d, Y H:i" }}</td>
-                        <td>{{ event.location }}</td>
-                        <td>{{ event.speaker_name }}</td>
-                        <td>
-                            <span class="badge bg-primary">{{ event.get_status_display }}</span>
-                        </td>
+                        <th>Event Name</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Speaker</th>
+                        <th>Status</th>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center">No events found.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.name }}</td>
+                            <td>{{ event.description }}</td>
+                            <td>{{ event.date|date:"F d, Y H:i" }}</td>
+                            <td>{{ event.location }}</td>
+                            <td>{{ event.speaker_name }}</td>
+                            <td>
+                            <span class="badge 
+                                {% if event.status == 'completed' %}bg-success{% elif event.status == 'upcoming' %}bg-primary{% elif event.status == 'cancelled' %}bg-danger{% endif %}">
+                                {{ event.get_status_display }}
+                            </span>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No events found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Pagination Controls -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?{% if name %}name={{ name }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-            {% for num in page_obj.paginator.page_range %}
-                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                    <a class="page-link" href="?{% if name %}name={{ name }}&{% endif %}page={{ num }}">{{ num }}</a>
-                </li>
-            {% endfor %}
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?{% if name %}name={{ name }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
+<ul class="pagination" id="pagination-links">
+<!-- First Page Link -->
+<li class="page-item">
+    <a class="page-link" href="?page=1" aria-label="First" onclick="loadPage(1); return false;">
+        <span aria-hidden="true">First</span>
+    </a>
+</li>
 
+<!-- Previous Page Link -->
+<li class="page-item" id="previous-page-item">
+  <a class="page-link" href="" id="previous-page-link" onclick="loadPreviousPage(); return false;">
+    &laquo;
+  </a>
+</li>
+
+
+  <!-- Next Page Link -->
+  <li class="page-item" id="next-page-item">
+    <a class="page-link" href="" id="next-page-link" onclick="loadNextPage(); return false;">
+      &raquo;
+    </a>
+  </li>
+
+  <!-- Last Page Link -->
+  <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last" onclick="loadPage({{ page_obj.paginator.num_pages }}); return false;">
+      <span aria-hidden="true">Last</span>
+    </a>
+  </li>
+</ul>
+
+<script>
+        const searchForm = document.getElementById('search-form');
+const eventsTableContainer = document.getElementById('events-table-container');
+
+searchForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(searchForm);
+    const params = new URLSearchParams(formData).toString(); // Convert formData to query string
+    const url = `${searchForm.action}?${params}`; // Append query params to URL
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            eventsTableContainer.innerHTML = data.html;
+        })
+        .catch((error) => console.error('Error:', error));
+});
+
+window.loadPage = function (pageNumber) {
+    if (pageNumber < 1) return; // Prevent invalid page numbers
+    const formData = new FormData(searchForm);
+    formData.append('page', pageNumber);
+
+
+    const url = `${searchForm.action}?${new URLSearchParams(formData).toString()}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        // Update the table content with new data
+        eventsTableContainer.innerHTML = data.html;
+
+        // Update the pagination links (active class)
+        const paginationLinks = document.querySelectorAll('#pagination-links .page-item');
+        paginationLinks.forEach(link => {
+            const pageLink = link.querySelector('a');
+            const pageNumberInLink = parseInt(pageLink.href.split('page=')[1]);
+
+            // Remove the active class from all pagination links
+            link.classList.remove('active');
+
+            // Add the active class to the current page
+            if (pageNumberInLink === pageNumber) {
+                link.classList.add('active');
+            }
+        });
+    })
+    .catch((error) => console.error('Error:', error));
+};
+// Next and Previous Page using js
+
+let currentPage = 1;  // Starting page number (this should be dynamic in your app)
+
+function loadPage(pageNumber) {
+    if (pageNumber < 1) return; // Prevent invalid page numbers
+    currentPage = pageNumber; // Update the current page number
+
+    const formData = new FormData(searchForm);
+    formData.append('page', pageNumber);
+
+    const url = `${searchForm.action}?${new URLSearchParams(formData).toString()}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        // Update the table content with new data
+        eventsTableContainer.innerHTML = data.html;
+
+        // Update pagination links (active class)
+        const paginationLinks = document.querySelectorAll('#pagination-links .page-item');
+        paginationLinks.forEach(link => {
+            const pageLink = link.querySelector('a');
+            const pageNumberInLink = parseInt(pageLink.textContent); // Using text content for the page number
+
+            // Remove the active class from all pagination links
+            link.classList.remove('active');
+
+            // Add the active class to the current page
+            if (pageNumberInLink === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Optional: Update the URL without reloading the page
+        history.pushState(null, null, `?page=${currentPage}`);
+    })
+    .catch((error) => console.error('Error:', error));
+}
+
+function loadNextPage() {
+    currentPage += 1; // Increment the page number for next page
+    loadPage(currentPage);  // Reuse the loadPage function to update content
+}
+
+function loadPreviousPage() {
+    if (currentPage > 1) {
+        currentPage -= 1; // Decrement the page number for previous page
+        loadPage(currentPage);  // Reuse the loadPage function to update content
+    }
+}
+
+function updatePaginationLinks(hasPrevious, hasNext) {
+    const previousPageLink = document.getElementById("previous-page-item");
+    const nextPageLink = document.getElementById("next-page-item");
+
+    if (hasPrevious) {
+        previousPageLink.classList.remove("disabled");
+    } else {
+        previousPageLink.classList.add("disabled");
+    }
+
+    if (hasNext) {
+        nextPageLink.classList.remove("disabled");
+    } else {
+        nextPageLink.classList.add("disabled");
+    }
+}
+
+// Initial page load handling
+const initialPageData = {
+    has_previous: true,  // Example value: dynamic based on current page
+    has_next: true,  // Example value: dynamic based on current page
+};
+
+updatePaginationLinks(initialPageData.has_previous, initialPageData.has_next);
+
+
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<!-- CSS -->
 <style>
-    h1{
+    .pagination{
+        margin-left: 15.3%;
+    }
+    .search-form-container {
+        max-width: 1077px; /* Adjust this value to reduce width */
+        margin: 0 auto;
+        margin-left: 190px; /* Center the form */
+        padding: 10px; /* Optional: Add padding for spacing */
+    }
+    
+    .search-form .form-control,
+    .search-form .form-select {
+        font-size: 14px; /* Optional: Adjust font size for better readability */
+    }
+    
+    /* Align form fields horizontally */
+    .search-form {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px; /* Adds spacing between elements */
+    }
+
+    .search-form .col-md-2,
+    .search-form .col-md-3,
+    .search-form .col-md-1 {
+        flex-grow: 1;
+    }
+
+    h1 {
         margin-top: 100px;
         margin-bottom: 50px;
     }
+
+    @media (max-width: 768px) {
+        .search-form {
+            flex-wrap: wrap;
+        }
+    }
+    .table-container {
+        max-width: 1200px; /* Adjust this value to control the width */
+        margin: 0 auto;
+        margin-left: 200px; /* Center the table */
+    }
+    
+    .table {
+        width: 100%; /* Ensure the table uses the container's width */
+    }   
 </style>
+
+<!-- Create_Event Pop UP -->
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <!-- Button to open the modal -->
+        <button id="createEventBtn" class="btn btn-success">Create New Event</button>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div class="modal" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createEventModalLabel">Create New Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createEventForm" method="POST" novalidate>
+                        {% csrf_token %}
+                        <!-- Event Name -->
+                        <div class="mb-4">
+                            <label for="eventName" class="form-label">Event Name</label>
+                            <input 
+                                type="text" 
+                                id="eventName" 
+                                name="name" 
+                                class="form-control" 
+                                placeholder="Enter event name" 
+                                required>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="mb-4">
+                            <label for="eventDate" class="form-label">Date</label>
+                            <input 
+                                type="date" 
+                                id="eventDate" 
+                                name="date" 
+                                class="form-control" 
+                                required>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-4">
+                            <label for="eventLocation" class="form-label">Location</label>
+                            <input 
+                                type="text" 
+                                id="eventLocation" 
+                                name="location" 
+                                class="form-control" 
+                                placeholder="Enter event location" 
+                                required>
+                        </div>
+
+                        <!-- Speaker Name -->
+                        <div class="mb-4">
+                            <label for="speakerName" class="form-label">Speaker Name</label>
+                            <input 
+                                type="text" 
+                                id="speakerName" 
+                                name="speaker_name" 
+                                class="form-control" 
+                                placeholder="Enter speaker name">
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="eventDescription" class="form-label">Description</label>
+                            <textarea 
+                                id="eventDescription" 
+                                name="description" 
+                                class="form-control" 
+                                rows="4" 
+                                placeholder="Enter event description"></textarea>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <label for="eventStatus" class="form-label">Status</label>
+                            <select 
+                                id="eventStatus" 
+                                name="status" 
+                                class="form-select" 
+                                required>
+                                <option value="">Select Status</option>
+                                <option value="upcoming">Upcoming</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-4">
+                            <label for="eventCategory" class="form-label">Category</label>
+                            <input 
+                                type="text" 
+                                id="eventCategory" 
+                                name="category" 
+                                class="form-control" 
+                                placeholder="Enter event category">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Create Event</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #createEventBtn {
+        position: absolute;
+        top: 90px;
+        right: 20px;
+    }
+    /* Modal Styles */
+    .modal .modal-content {
+        border-radius: 8px;
+    }
+
+    .modal-header {
+        background: #007bff;
+        color: white;
+    }
+
+    .modal-header .btn-close {
+        background: transparent;
+        border: none;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-primary {
+        background: #007bff;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+
+    /* Title and Label Styling */
+    h1 {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #555;
+    }
+    /* Make the modal body scrollable */
+.modal-body {
+    max-height: 400px; /* Set a desired maximum height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+}
+
+/* Optional: Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden; 
+}
+
+</style>
+
+<script>
+
+    // JavaScript for opening modal
+    document.getElementById('createEventBtn').addEventListener('click', function() {
+        // Show the modal when button is clicked
+        var modal = new bootstrap.Modal(document.getElementById('createEventModal'));
+        modal.show();
+    });
+
+    // Form submission via AJAX
+    document.getElementById('createEventForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        fetch("{% url 'create_event' %}", {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',  // For AJAX detection
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close modal and reset the form
+                $('#createEventModal').modal('hide');
+                this.reset();
+
+                // Optionally, you can dynamically update the event list here
+                alert('Event created successfully!');
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
 {% endblock %}

@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,6 +24,14 @@ urlpatterns = [
     path('category/', include('app.categories.urls')),
     path('events/', include('app.events.urls')),
     path('marks/', include('app.marks.urls')),
-    path('members/', include('app.members.urls')),
+    path('users/', include('app.users.urls')),
     path('wishes/', include('app.wishes.urls')),
+    path('tickets/', include('app.tickets.urls')),
+    path('search/', include('app.search.urls')),
+    path('contact/', include('app.contact.urls')),
 ]
+if settings.DEBUG:  # Only include in debug mode
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

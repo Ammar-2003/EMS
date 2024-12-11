@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+        /* General Reset and Setup */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Wrapper */
+        .contact-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Form Container */
+        .contact-container {
+            width: 40%; /* Reduced from 50% */
+            margin-top: 5%;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .contact-header {
+            background-color: #007BFF;
+            padding: 15px; /* Reduced from 20px */
+            text-align: center;
+            color: white;
+        }
+
+        .contact-header h1 {
+            margin: 0;
+            font-size: 1.8rem; /* Reduced font size */
+            font-weight: bold;
+        }
+
+        .contact-header p {
+            margin: 10px 0 0;
+            font-size: 0.9rem; /* Reduced font size */
+            opacity: 0.8;
+        }
+
+        /* Form Section */
+        .contact-form {
+            padding: 20px; /* Reduced from 30px */
+        }
+
+        .form-group {
+            margin-bottom: 15px; /* Reduced from 20px */
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px; /* Reduced from 8px */
+            font-size: 0.9rem; /* Smaller font */
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px; /* Reduced from 15px */
+            font-size: 0.9rem; /* Smaller font size */
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Reduced from 10px */
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 120px; /* Reduced height */
+        }
+
+        /* Submit Button */
+        .submit-btn {
+    display: block;
+    width: auto; /* Remove full width */
+    padding: 8px 20px; /* Adjust padding to make it smaller */
+    font-size: 0.9rem; /* Reduce font size */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Smaller border radius */
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 auto; /* Center the button if needed */
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+        /* Footer */
+        .contact-footer {
+            text-align: center;
+            padding: 10px; /* Reduced from 15px */
+            background: #f4f4f4;
+            font-size: 0.8rem; /* Reduced font size */
+            color: #555;
+        }
+        .contactuspage{
+            width: 50%;
+            margin-left: 25%;
+            margin-top: 5%;
+        }
+        .contact-footer{
+            margin-top: 7%;
+        }
+    </style>
+    <div class="contactuspage">
+<form class="contact-form" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your Full Name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Your Email Address" required>
+    </div>
+
+    <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="Message Subject" required>
+    </div>
+
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Send Message</button>
+</form>
+</div>
+<div class="contact-footer">
+    <p>&copy; SkillEvokers. All Rights Reserved.</p>
+</div>
+
+{% endblock %}

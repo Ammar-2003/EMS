@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-container text-center">
+    <!-- Trigger Button -->
+    <button id="openPopup" class="btn btn-success">Purchase Ticket</button>
+</div>
+
+<!-- Popup Modal -->
+<div id="ticketPopup" class="popup-container">
+    <div class="popup-content">
+        <span id="closePopup" class="close-btn">&times;</span>
+        <h2 class="text-center">Purchase Tickets</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <!-- Available Ticket Field -->
+                <label for="{{ form.available_ticket.id_for_label }}">Available Tickets</label>
+                {{ form.available_ticket }}
+                {% if form.available_ticket.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.available_ticket.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.quantity.id_for_label }}">Quantity</label>
+                {{ form.quantity }}
+                {% if form.quantity.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.quantity.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-2">Purchase</button>
+        </form>
+
+        {% if messages %}
+        <div class="messages mt-4">
+            <ul class="list-unstyled">
+                {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+/* Main Container */
+.main-container {
+    margin-top: 5%;
+    margin-left: 90%;
+}
+
+/* Popup Modal Styles */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: #f9f9f9;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.popup-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const openPopup = document.getElementById("openPopup");
+    const closePopup = document.getElementById("closePopup");
+    const ticketPopup = document.getElementById("ticketPopup");
+
+    // Show the popup
+    openPopup.addEventListener("click", function () {
+        ticketPopup.style.display = "flex";
+    });
+
+    // Close the popup
+    closePopup.addEventListener("click", function () {
+        ticketPopup.style.display = "none";
+    });
+
+    // Close popup when clicking outside of it
+    window.addEventListener("click", function (e) {
+        if (e.target === ticketPopup) {
+            ticketPopup.style.display = "none";
+        }
+    });
+});
+</script>
+{% endblock %}

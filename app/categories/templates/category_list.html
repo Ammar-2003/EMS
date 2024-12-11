@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class='CategoryContainer'>
 <div class="container my-5">
     <h1 class="display-6 text-center">Categories</h1>
     <div class="text-end mb-4">
@@ -30,7 +31,7 @@
         </table>
     </div>
 </div>
-
+</div>
 <!-- Modal for Create Category -->
 <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -56,6 +57,17 @@
         </div>
     </div>
 </div>
+
+<style>
+    h1{
+        margin-top: 100px;
+    }
+  .CategoryContainer{
+    max-width: 1000px;
+    margin-left: 370px;
+
+  }
+</style>
 
 {% endblock %}
 

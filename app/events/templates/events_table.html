@@ -1,0 +1,35 @@
+<table id="events-table" class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Event Name</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Speaker</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in page_obj %}
+        <tr>
+            <td>{{ event.name }}</td>
+            <td>{{ event.description }}</td>
+            <td>{{ event.date|date:"F d, Y H:i" }}</td>
+            <td>{{ event.location }}</td>
+            <td>{{ event.speaker_name }}</td>
+            <td>
+                <span class="badge 
+                    {% if event.status == 'completed' %}bg-success{% elif event.status == 'upcoming' %}bg-primary{% elif event.status == 'cancelled' %}bg-danger{% endif %}">
+                    {{ event.get_status_display }}
+                </span>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">No events found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- You can also return pagination controls here if needed -->
