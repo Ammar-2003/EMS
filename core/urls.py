@@ -23,6 +23,6 @@ urlpatterns = [
     path('category/', include('app.categories.urls')),
     path('events/', include('app.events.urls')),
     path('marks/', include('app.marks.urls')),
-    path('members', include('app.members.urls')),
-    path('wishes', include('app.wishes.urls')),
+    path('members/', include('app.members.urls')),
+    path('wishes/', include('app.wishes.urls')),
 ]

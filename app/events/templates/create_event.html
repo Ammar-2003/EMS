@@ -1,50 +1,168 @@
-<!-- create_event.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="display-6 text-center">Create New Event</h1>
+    <h1 class="display-6 text-center mb-4">Create New Event</h1>
     <div class="text-end mb-4">
-        <a href="{% url 'event_list' %}" class="btn btn-success">Back to Events</a>
+        <a href="{% url 'event_list' %}" class="btn btn-outline-success">Back to Events</a>
     </div>
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <div class="card p-4 shadow-sm">
+            <div class="card p-5 shadow border-0 rounded">
                 <form method="POST" novalidate>
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_name" class="form-label">Event Name: </label>
-                        {{ form.name }}
+                    <!-- Event Name -->
+                    <div class="mb-4">
+                        <label for="eventName" class="form-label">Event Name</label>
+                        <input 
+                            type="text" 
+                            id="eventName" 
+                            name="name" 
+                            class="form-control" 
+                            placeholder="Enter event name" 
+                            required>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_date" class="form-label">Date: </label>
-                        {{ form.date }}
+
+                    <!-- Date -->
+                    <div class="mb-4">
+                        <label for="eventDate" class="form-label">Date</label>
+                        <input 
+                            type="date" 
+                            id="eventDate" 
+                            name="date" 
+                            class="form-control" 
+                            required>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_location" class="form-label">Location: </label>
-                        {{ form.location }}
+
+                    <!-- Location -->
+                    <div class="mb-4">
+                        <label for="eventLocation" class="form-label">Location</label>
+                        <input 
+                            type="text" 
+                            id="eventLocation" 
+                            name="location" 
+                            class="form-control" 
+                            placeholder="Enter event location" 
+                            required>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_speaker_name" class="form-label">Speaker Name: </label>
-                        {{ form.speaker_name }}
+
+                    <!-- Speaker Name -->
+                    <div class="mb-4">
+                        <label for="speakerName" class="form-label">Speaker Name</label>
+                        <input 
+                            type="text" 
+                            id="speakerName" 
+                            name="speaker_name" 
+                            class="form-control" 
+                            placeholder="Enter speaker name">
                     </div>
-                    <div class="mb-3">
-                        <label for="id_description" class="form-label">Description: </label>
-                        {{ form.description }}
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label for="eventDescription" class="form-label">Description</label>
+                        <textarea 
+                            id="eventDescription" 
+                            name="description" 
+                            class="form-control" 
+                            rows="4" 
+                            placeholder="Enter event description"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_status" class="form-label">Status:</label>
-                        {{ form.status }}
+
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <label for="eventStatus" class="form-label">Status</label>
+                        <select 
+                            id="eventStatus" 
+                            name="status" 
+                            class="form-select" 
+                            required>
+                            <option value="">Select Status</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_category" class="form-label">Category:</label>
-                        {{ form.category }}  <!-- Display category field -->
+
+                    <!-- Category -->
+                    <div class="mb-4">
+                        <label for="eventCategory" class="form-label">Category</label>
+                        <input 
+                            type="text" 
+                            id="eventCategory" 
+                            name="category" 
+                            class="form-control" 
+                            placeholder="Enter event category">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 mt-3">Create Event</button>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Create Event</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+<style>
+    /* Container and Card Styling */
+    .container {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .card {
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Inputs Styling */
+    .form-control, .form-select {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Button Styling */
+    .btn-primary {
+        background: #007bff;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+
+    .btn-outline-success {
+        font-size: 0.9rem;
+        border: 2px solid #28a745;
+        color: #28a745;
+        padding: 8px 15px;
+        border-radius: 8px;
+    }
+
+    .btn-outline-success:hover {
+        background: #28a745;
+        color: white;
+    }
+
+    /* Title and Label Styling */
+    h1 {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #555;
+    }
+    h1{
+        margin-top: 100px;
+    }
+</style>
 {% endblock %}

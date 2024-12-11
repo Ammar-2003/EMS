@@ -1,29 +1,93 @@
-<!-- event_list.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="container my-5">
     <h1 class="display-6 text-center">Events</h1>
-    <div class="text-end mb-4">
-        <a href="{% url 'create_event' %}" class="btn btn-success">Create New Event</a>
+
+    <!-- Search Form for Event Name -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
+                <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+        </div>
+        <!-- Event Name Search -->
+        <div class="col-md-6">
+            <input type="text" name="name" class="form-control" value="{{ name }}" placeholder="Search by Event Name">
+        </div>
+        
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    <!-- Events Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Event Name</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Speaker</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.description }}</td>
+                        <td>{{ event.date|date:"F d, Y H:i" }}</td>
+                        <td>{{ event.location }}</td>
+                        <td>{{ event.speaker_name }}</td>
+                        <td>
+                            <span class="badge bg-primary">{{ event.get_status_display }}</span>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No events found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        {% for event in events %}
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ event.name }}</h5>
-                        <p class="card-text">{{ event.description }}</p>
-                        <p><strong>Date:</strong> {{ event.date|date:"F d, Y H:i" }}</p>
-                        <p><strong>Location:</strong> {{ event.location }}</p>
-                        <p><strong>Speaker:</strong> {{ event.speaker_name }}</p> <!-- Added speaker field -->
-                        <span class="badge bg-primary">{{ event.get_status_display }}</span>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            <p class="text-center">No events available at the moment.</p>
-        {% endfor %}
-    </div>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% if name %}name={{ name }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?{% if name %}name={{ name }}&{% endif %}page={{ num }}">{{ num }}</a>
+                </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% if name %}name={{ name }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
+
+<style>
+    h1{
+        margin-top: 100px;
+        margin-bottom: 50px;
+    }
+</style>
 {% endblock %}

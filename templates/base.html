@@ -11,12 +11,15 @@
     <style>
         /* Navbar Styling */
         .navbar-custom {
-            background-color: #191970; /* Dark navbar background */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 0.25rem 1rem; /* Reduced padding to reduce height */
-            border-bottom: 1.5px solid #fff; /* Add white border to the bottom */
+            background-color: #191970 !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+            padding: 0.5rem 1rem !important;
+            border-bottom: 1.5px solid #fff !important;
+            position: fixed !important;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
-
         /* Navbar brand with icon */
         .navbar-custom .navbar-brand {
             color: #f8f9fa;
@@ -28,16 +31,16 @@
         }
 
         .navbar-custom .navbar-brand .fa-user-shield {
-            margin-right: 0.5rem; /* Reduced space between icon and text */
+            margin-left: 1rem; /* Reduced space between icon and text */
             font-size: 1.1rem; /* Slightly reduced icon size */
         }
 
         /* White separator */
         .navbar-custom .navbar-brand .separator {
             width: 0.05vw; /* Adjust the separator width */
-            height: 7vh; /* Reduced height */
+            height: 3.5vw; /* Reduced height */
             background-color: #fff;
-            margin-left: 10.7rem; /* Reduced space using rem */
+            margin-left: 12.68vw; /* Reduced space using rem */
             position: absolute;
             top: 50%;
             transform: translateY(-50%); /* Adjust to perfectly center it */
@@ -113,14 +116,36 @@
 .navbar-custom .nav-item.dropdown .nav-link .dropdown-toggle::after {
     color: #f8f9fa; /* Icon color to match navbar links */
 }
+/* Targeting the icon and text within the Admin Panel brand */
+.admin-panel-brand {
+    color: #f8f9fa;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+    /* Target the Admin Panel text and icon */
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #f8f9fa;
+        margin-left: -7vw;
+    }
+
+    /* Add margin specifically to the icon within navbar-brand */
+    .navbar-brand i {
+        margin-right: 0.5rem; /* Space between the icon and "Admin Panel" text */
+    }
 
 
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+        <div class="container">
+            <a class="navbar-brand me-auto" href="#">
                 <i class="fas fa-user-shield"></i> <!-- Admin Panel Icon -->
                 Admin Panel
                 <span class="separator"></span> <!-- White separator -->
@@ -131,27 +156,25 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             More
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Create Event</a></li>
+                            <li><a class="dropdown-item" href="{% url 'create_event' %}">Create Event</a></li>
                             <li><a class="dropdown-item" href="#">Update Event</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Delete Event</a></li>
                         </ul>
                     </li>
                 </ul>
-    
                 <!-- Search bar without button -->
                 <input class="form-control search-bar" type="search" placeholder="Search" aria-label="Search">
-                
                 <!-- Icons for notifications, messages, login/logout -->
                 <a href="#" class="icon-link" title="Notifications"><i class="fas fa-bell"></i></a>
                 <a href="#" class="icon-link" title="Messages"><i class="fas fa-envelope"></i></a>
